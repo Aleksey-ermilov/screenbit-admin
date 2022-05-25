@@ -1,0 +1,8 @@
+export const AUTH_ROUTER='/'
+export const ORDERS_ROUTER='/orders'
+export const LEADS_ROUTER='/leads'
+export const TASKMAN_ROUTER='/taskman'
+export const SHOP_ROUTER='/shop'
+export const PAYMENTS_ROUTER='/payments'
+export const WAREHOUSE_ROUTER='/warehouse'
+export const CLIENTS_ROUTER='/clients'
