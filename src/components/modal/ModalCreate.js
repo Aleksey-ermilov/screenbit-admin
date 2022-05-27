@@ -1,11 +1,15 @@
 import React,{useState} from 'react';
+import {useDispatch} from 'react-redux'
 import {Modal, Form,Row,Col, InputGroup,DropdownButton,Dropdown,FormControl} from 'react-bootstrap'
 
 import BoxImgModalCreate from "../BoxImgModalCreate";
 import BoxAddImgModalCreate from "../BoxAddImgModalCreate";
 import {httpCreateProduct} from "../../http/productApi";
+import {addProducts} from "../../store/product/actionProduct";
 
 const ModalCreate = ({show,onHide,}) => {
+    const dispatch = useDispatch()
+
     const [file,setFile] = useState([])
     const [img,setImg] = useState([])
 
@@ -24,7 +28,7 @@ const ModalCreate = ({show,onHide,}) => {
         })
 
         const formData = new FormData();
-        img.forEach(item => formData.append('img',item))
+        img.forEach(item => formData.append('img',item.picture))
         formData.append('name',obj.name)
         formData.append('brand',obj.brand)
         formData.append('category',obj.category)
@@ -36,7 +40,8 @@ const ModalCreate = ({show,onHide,}) => {
         formData.append('characteristics',JSON.stringify(arr))
 
         httpCreateProduct(formData).then(data => {
-            // onHide()
+            dispatch(addProducts(data))
+        //     // onHide()
         })
         /*
             name: Galaxy A38
@@ -64,18 +69,20 @@ const ModalCreate = ({show,onHide,}) => {
     }
 
     const handlerAddImg = e => {
+        const id = Date.now()
         if (e.target.files.length){
             const fr = new FileReader()
             fr.onload = (event) => {
-                setFile(prev => [...prev, {img: event.target.result, id: prev.length}] )
+                setFile(prev => [...prev, {img: event.target.result, id: id}] )
             }
             fr.readAsDataURL(e.target.files[0]);
-            setImg(prev => [...prev, e.target.files[0]])
+            setImg(prev => [...prev, {picture: e.target.files[0], id }])
         }
     }
 
     const handlerBtnDelete = (file) => {
         setFile(prev => prev.filter(item => item.id !== file.id))
+        setImg(prev => prev.filter(item => item.id !== file.id) )
     }
     const handlerBtnArrowTop = (file) => {
         setFile(prev => [file, ...prev.filter(item => item.id !== file.id)])
@@ -191,7 +198,7 @@ const ModalCreate = ({show,onHide,}) => {
                         onChange={ e => handlerFormControl(e)}
                     />
                 </Form.Group>
-                <Form.Group controlId="formLastname" className='mb-2'>
+                <Form.Group controlId="formBrand" className='mb-2'>
                     <Form.Label className='font-s-18' >Бренд</Form.Label>
                     <Form.Control
                         className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
@@ -200,7 +207,7 @@ const ModalCreate = ({show,onHide,}) => {
                         onChange={ e => handlerFormControl(e)}
                     />
                 </Form.Group>
-                <Form.Group controlId="formPatronymic" className='mb-2'>
+                <Form.Group controlId="formCategory" className='mb-2'>
                     <Form.Label className='font-s-18' >Категория</Form.Label>
                     <Form.Control
                         className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'

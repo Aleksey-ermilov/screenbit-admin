@@ -1,10 +1,10 @@
 import React from 'react';
 import {Modal} from "react-bootstrap";
 
-const ModalDeleteProduct = ({show,onHide}) => {
+const ModalDeleteProduct = ({show,onHide,remove}) => {
 
     const handlerBtnDelete = () => {
-        console.log('DELETE!!!',show.id)
+        remove(show.id)
         onHide()
     }
     const handlerBtnCancel = () => {

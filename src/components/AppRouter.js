@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux'
 import Layout from "./Layout";
 
 import {authRouter, publicRouter} from "../routes";
+import Auth from "../pages/Auth";
 
 const AppRouter = () => {
     const isAuth = useSelector((state) => state.user.isAuth)
@@ -25,6 +26,10 @@ const AppRouter = () => {
                                 key={path} />
                         )
                     }
+                    <Route
+                        path="*"
+                        element={<Auth />}
+                    />
                 </Route>
 
             </Routes>

@@ -107,6 +107,12 @@ code {
 .font-w-100{
   font-weight: 100;
 }
+.font-w-200{
+  font-weight: 200;
+}
+.font-w-300{
+  font-weight: 300;
+}
 
 a{
   text-decoration: none;
@@ -132,6 +138,15 @@ a:active,a:focus,a:hover{
   grid-column: 2;
 }
 
+.header{
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 100;
+  background-color: var(--secondary);
+}
+
 .navbar{
   background: linear-gradient(180deg, #DC6A00 0%, #F9321F 100%);
   min-width: 175px;
@@ -155,6 +170,10 @@ a:active,a:focus,a:hover{
   border: 1px solid #d70000;
   padding: 2px 6px;
   border-radius: 3px;
+}
+.navbar-link-exit{
+  position: absolute;
+  bottom: 20px;
 }
 
 .orders-filter-btn-green{
@@ -321,7 +340,7 @@ input[type="file"] {
   opacity:.7;
   background: black;
 }
-.my-form-control{
+.my-form-control,.my-form-control:-internal-autofill-selected{
   background: var(--secondary);
   border: 1px solid transparent;
   border-radius: 10px;
@@ -333,5 +352,13 @@ input[type="file"] {
 }
 .my-form-control:focus{
   outline: none;
-
+}
+.auth-box{
+  background: var(--main-color);
+}
+.auth-card{
+  padding: 20px;
+  border-radius: 20px;
+  width: 450px;
+  background: var(--secondary);
 }

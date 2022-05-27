@@ -1,16 +1,16 @@
 import {
-
+    SET_AUTH
 } from './types'
 
 const initialState = {
-    isAuth: true
+    isAuth: false
 }
 
 export const userReduce = (state = initialState, action) => {
     switch (action.type){
-        // case SET_FAVORITES: return {
-        //     ...state, favorites: action.payload
-        // }
+        case SET_AUTH: return {
+            ...state, isAuth: action.payload
+        }
         default: return state
     }
 }

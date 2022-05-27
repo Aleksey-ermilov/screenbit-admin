@@ -34,13 +34,30 @@ const BoxImgModalCreate = ({deleteFile,setOneElem,file,index,width=150,height=15
                                 <DeleteSvg fill={'white'} width={sizeSvg} height={sizeSvg} />
                             </div>
                         </div>
-                        <Image src={file.img} width={width} height={height} />
+                        <Image
+                            src={file.img.includes('data') ? file.img : `${process.env.REACT_APP_API_URL}${file.img}`}
+                            width={width}
+                            height={height}
+                        />
+                        {/*<Image src={file.img} width={width} height={height} />*/}
                     </div>
                     :
-                    <Image className={className} src={file.img} width={width} height={height}
-                           onMouseEnter={(e) => handlerHoverEnter(e)}
-                           onMouseLeave={(e) => handlerHoverLeave(e)}
+                    <Image
+                        className={className}
+                        src={file.img.includes('data') ? file.img : `${process.env.REACT_APP_API_URL}${file.img}`}
+                        width={width}
+                        height={height}
+                        onMouseEnter={(e) => handlerHoverEnter(e)}
+                        onMouseLeave={(e) => handlerHoverLeave(e)}
                     />
+                    /*<Image
+                        className={className}
+                        src={file.img}
+                        width={width}
+                        height={height}
+                        onMouseEnter={(e) => handlerHoverEnter(e)}
+                        onMouseLeave={(e) => handlerHoverLeave(e)}
+                    />*/
             }
         </>
     );

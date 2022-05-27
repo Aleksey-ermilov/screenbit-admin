@@ -1,12 +1,13 @@
 import React from 'react';
-import {Image} from 'react-bootstrap'
-import {NavLink,useLocation} from 'react-router-dom'
+import {NavLink,useLocation,useNavigate} from 'react-router-dom'
+import {useDispatch} from "react-redux";
 
 import Logo from "../img/svg/Logo";
 import LeadsSvg from "../img/svg/LeadsSvg";
 import OrdersSvg from "../img/svg/OrdersSvg";
 
 import {
+    AUTH_ROUTER,
     CLIENTS_ROUTER,
     LEADS_ROUTER,
     ORDERS_ROUTER,
@@ -19,6 +20,8 @@ import ShopSvg from "../img/svg/ShopSvg";
 import PaymentsSvg from "../img/svg/PaymentsSvg";
 import WarehouseSvg from "../img/svg/WarehouseSvg";
 import ClientsSvg from "../img/svg/ClientsSvg";
+import ExitSvg2 from "../img/svg/ExitSvg2";
+import {setAuth} from "../store/user/actionUser";
 
 const navbar = [
     {
@@ -57,6 +60,13 @@ const navbar = [
 
 const NavBar = () => {
     const location = useLocation()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const handlerLogout = () => {
+        navigate(AUTH_ROUTER)
+        dispatch(setAuth(false))
+    }
 
     return (
         <div className='font-s-16 pt-4'>
@@ -92,6 +102,13 @@ const NavBar = () => {
                     )
                 }
             </div>
+                <div
+                    onClick={handlerLogout}
+                    className='p-3 cursor-pointer navbar-link navbar-link-exit'
+                >
+                    <ExitSvg2 fill={'#FFF'} />
+                    <span className='ms-2'>Выход</span>
+                </div>
         </div>
     );
 };

@@ -3,7 +3,7 @@ import {
     CLIENTS_ROUTER,
     LEADS_ROUTER,
     ORDERS_ROUTER,
-    PAYMENTS_ROUTER,
+    PAYMENTS_ROUTER, PRODUCT_CARD_ROUTER,
     SHOP_ROUTER,
     TASKMAN_ROUTER, WAREHOUSE_ROUTER
 } from "./consts";
@@ -16,6 +16,7 @@ import Payments from "./pages/Payments";
 import Shop from "./pages/Shop";
 import Taskman from "./pages/Taskman";
 import Warehouse from "./pages/Warehouse";
+import ProductCard from "./pages/ProductCard";
 
 
 export const authRouter = [
@@ -46,6 +47,10 @@ export const authRouter = [
     {
         path: WAREHOUSE_ROUTER,
         Component: Warehouse
+    },
+    {
+        path: PRODUCT_CARD_ROUTER,
+        Component: ProductCard
     },
 ]
 

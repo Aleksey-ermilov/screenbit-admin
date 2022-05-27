@@ -1,6 +1,7 @@
 import React, {useEffect,useState} from 'react';
 import {useSelector,useDispatch} from "react-redux";
 import {Image,Card} from 'react-bootstrap'
+import {useNavigate} from 'react-router-dom'
 
 import PlusSvg from "../img/svg/PlusSvg";
 
@@ -10,14 +11,17 @@ import Loading from "./Loading";
 import ModalCreate from "../components/modal/ModalCreate";
 import ModalDeleteProduct from "../components/modal/ModalDeleteProduct";
 
-import {httpGetProducts} from '../http/productApi'
+import {httpDeleteProduct, httpGetProducts, httpUpdateProduct} from '../http/productApi'
 
-import {fetchProducts} from '../store/product/actionProduct'
+import {fetchProducts, deleteProducts, updateProducts} from '../store/product/actionProduct'
 import EmptyListMes from "../components/EmptyListMes";
+import {PRODUCT_CARD_ROUTER} from "../consts";
 
 const Warehouse = () => {
     const {products} = useSelector( state => state.product)
     const dispatch = useDispatch()
+
+    const navigate = useNavigate();
 
     const [ isShowModalCreate, setIsShowModalCreate ] = useState(false)
     const [ isShowModalDelete, setIsShowModalDelete ] = useState({show:false,name:'',id:''})
@@ -29,6 +33,24 @@ const Warehouse = () => {
             dispatch(fetchProducts(data.rows))
         }).finally(() => setLoading(false))
     },[])
+
+    const handlerDeleteProduct = product_id => {
+        httpDeleteProduct(product_id).then(data => {
+            dispatch(deleteProducts(product_id))
+        })
+        dispatch(deleteProducts(product_id))
+    }
+
+    const handlerSwitch = (e,product) => {
+        httpUpdateProduct({...product, active: e.target.checked}).then(data => {
+            dispatch(updateProducts({...data.product }))
+        })
+        // dispatch(updateProducts({...product, active: e.target.checked}))
+    }
+
+    const handlerNavigate = (item) => {
+        navigate(PRODUCT_CARD_ROUTER, {state: {product_id: item.product_id,product:item} })
+    }
 
     if (loading){
         return <Loading />
@@ -52,7 +74,10 @@ const Warehouse = () => {
                     products.length ?
                         products.map(item =>
                             <Card key={item.product_id} className='shadow-mine p-3 m-2'>
-                                <Image src={`${process.env.REACT_APP_API_URL}${item.img[0]}`} width={150} height={150} />
+                                <div onClick={() => handlerNavigate(item)} >
+                                    <Image src={`${process.env.REACT_APP_API_URL}${item.img[0]}`} width={150} height={150} />
+                                    {/*<Image src={item.img[0]} width={150} height={150} />*/}
+                                </div>
                                 <div className='mt-2'>
                                     <div className='d-flex justify-content-between'>
                                         <div>{item.brand}</div>
@@ -68,7 +93,12 @@ const Warehouse = () => {
                                     <div className='d-flex justify-content-between align-items-center'>
                                         <div>Активный</div>
                                         <label className="switch">
-                                            <input checked={item.active} type="checkbox" name={'geolacation'} onChange={ e => console.log(e.target.name,e.target.checked)} />
+                                            <input
+                                                checked={item.active}
+                                                type="checkbox"
+                                                name={'geolacation'}
+                                                onChange={(e) => handlerSwitch(e,item)}
+                                            />
                                             <span className="slider round"></span>
                                         </label>
                                     </div>
@@ -88,7 +118,7 @@ const Warehouse = () => {
             </div>
 
             <ModalCreate onHide={() => setIsShowModalCreate(false)} show={isShowModalCreate} />
-            <ModalDeleteProduct onHide={() => setIsShowModalDelete({show:false,name:'',id:''})} show={isShowModalDelete} />
+            <ModalDeleteProduct remove={handlerDeleteProduct} onHide={() => setIsShowModalDelete({show:false,name:'',id:''})} show={isShowModalDelete} />
 
         </div>
     );
