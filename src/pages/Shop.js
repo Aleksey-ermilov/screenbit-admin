@@ -1,19 +1,32 @@
-import React from 'react';
-import Header from "../components/Header";
+import React, {useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import PlusSvg from "../img/svg/PlusSvg";
 import {Table} from "react-bootstrap";
+
+import ModalShop from "../components/modal/ModalShop";
+
+import Header from "../components/Header";
+
+import PlusSvg from "../img/svg/PlusSvg";
+import {setSales} from "../store/product/actionProduct";
 
 const Shop = () => {
     const {sales} = useSelector(state => state.product)
     const dispatch = useDispatch()
+
+    const [isShowModalShop,setIsShowModalShop] = useState(false)
+
+    const option = { year: 'numeric', month: 'numeric', day: 'numeric',hour:'numeric',minute:'numeric' }
+
+    const handlerAddShop = value => {
+        dispatch(setSales([value, ...sales]))
+    }
 
     return (
         <div>
             <Header title={'Продажи'} />
             <div className='d-flex'>
                 <div
-                    onClick={() => {}}
+                    onClick={() => setIsShowModalShop(true) }
                     className='orders-filter-btn orders-filter-btn-green shadow-mine-hover mx-3 mb-3'>
                     <PlusSvg fill='#fff' width="1em" height="1em" />
                     <div className='ms-2'>Продажа</div>
@@ -35,16 +48,18 @@ const Shop = () => {
                         !!sales.length &&
                         sales.map((item,i) =>
                             <tr key={i}>
-                                <td>{item.status}</td>
-                                <td>{item.name}</td>
-                                <td>{item.category}</td>
-                                <td>{+item.price * item.count}</td>
+                                <td>{item.shop_id}</td>
+                                <td>{new Date(item.date).toLocaleDateString('ru-RU',option)}</td>
+                                <td>{item.employees}</td>
+                                <td>{item.warehouse}</td>
+                                <td>{item.summa}</td>
                             </tr>
                         )
                     }
                     </tbody>
                 </Table>
             </div>
+            <ModalShop addShop={handlerAddShop} show={isShowModalShop} onHide={() => setIsShowModalShop(false)} />
         </div>
     );
 };

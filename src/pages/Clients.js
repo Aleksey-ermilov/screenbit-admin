@@ -1,20 +1,30 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useSelector,useDispatch} from "react-redux";
 import {Table} from 'react-bootstrap'
 
+import ModalClients from "../components/modal/ModalClients";
+
 import Header from "../components/Header";
+
 import PlusSvg from "../img/svg/PlusSvg";
+import {setClients} from "../store/product/actionProduct";
 
 const Clients = () => {
     const {clients} = useSelector(state => state.product)
     const dispatch = useDispatch()
+
+    const [isShowModalClients,setIsShowModalClients] = useState(false)
+
+    const handlerAddClients = value => {
+        dispatch(setClients([value,...clients]))
+    }
 
     return (
         <div>
             <Header title={'Клиенты'} />
             <div className='d-flex'>
                 <div
-                    onClick={() => {}}
+                    onClick={() => setIsShowModalClients(true)}
                     className='orders-filter-btn orders-filter-btn-green shadow-mine-hover mx-3 mb-3'>
                     <PlusSvg fill='#fff' width="1em" height="1em" />
                     <div className='ms-2'>Добавить клиента</div>
@@ -35,16 +45,17 @@ const Clients = () => {
                         !!clients.length &&
                         clients.map((item,i) =>
                             <tr key={i}>
-                                <td>{item.status}</td>
                                 <td>{item.name}</td>
-                                <td>{item.category}</td>
-                                <td>{+item.price * item.count}</td>
+                                <td>{item.email}</td>
+                                <td>{item.phone}</td>
+                                <td>{item.address}</td>
                             </tr>
                         )
                     }
                     </tbody>
                 </Table>
             </div>
+            <ModalClients addClient={handlerAddClients} show={isShowModalClients} onHide={() => setIsShowModalClients(false)} />
         </div>
     );
 };

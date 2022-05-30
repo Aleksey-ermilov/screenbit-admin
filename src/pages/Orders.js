@@ -83,7 +83,7 @@ const Orders = () => {
                                         <td>{item.status}</td>
                                         <td>{item.name}</td>
                                         <td>{item.category}</td>
-                                        <td>{+item.price * item.count}</td>
+                                        <td>{Number(item.price.replace(/[^\d]/g, '')) * item.count}</td>
                                         <td>{item.count}</td>
                                         <td>{item.address.address}</td>
                                         <td>{new Date(item.date).toLocaleDateString('ru-RU',option)}</td>
@@ -122,7 +122,7 @@ const Orders = () => {
                                         <td>{item.problem}</td>
                                         <td>{item.complexRepair.map(thing=> thing.name).join(', ')}</td>
                                         <td>{item.simpleRepair.map(thing=> thing.name).join(', ')}</td>
-                                        <td>{item?.price}</td>
+                                        <td>{item.price}</td>
                                         <td>{item.phone ? item.phone : 'не указн'}</td>
                                         <td>{item.email ? item.email : 'не указн'}</td>
                                     </tr>

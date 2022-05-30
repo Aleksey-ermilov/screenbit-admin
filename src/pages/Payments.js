@@ -1,12 +1,24 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ListGroup, Tab, Card, Table,Row,Col} from "react-bootstrap";
+import {useDispatch, useSelector} from "react-redux";
+
+import ModalMutualization from "../components/modal/ModalMutualization";
 
 import Header from "../components/Header";
-import {useDispatch, useSelector} from "react-redux";
+
+import PlusSvg from "../img/svg/PlusSvg";
+import {setMutualSettlements} from "../store/product/actionProduct";
 
 const Payments = () => {
     const {cashDesk,mutualSettlements} = useSelector(state => state.product)
     const dispatch = useDispatch()
+
+    const [isShowModalMutualization,setIsShowModalMutualization] = useState(false)
+
+    const handlerAddMutualization = value => {
+        console.log(11,value)
+        dispatch(setMutualSettlements([value, ...mutualSettlements]))
+    }
 
     return (
         <div>
@@ -98,6 +110,14 @@ const Payments = () => {
                             </Tab.Pane>
                             <Tab.Pane eventKey="#orders">
                                 <div className='ms-3'>
+                                    <div className='d-flex'>
+                                        <div
+                                            onClick={() => setIsShowModalMutualization(true) }
+                                            className='orders-filter-btn orders-filter-btn-green shadow-mine-hover mx-3 mb-3'>
+                                            <PlusSvg fill='#fff' width="1em" height="1em" />
+                                            <div className='ms-2'>Добавить</div>
+                                        </div>
+                                    </div>
                                     <Table striped bordered hover responsive
 
                                     >
@@ -130,7 +150,7 @@ const Payments = () => {
 
                 </Tab.Container>
             </div>
-
+            <ModalMutualization addMutualization={handlerAddMutualization} show={isShowModalMutualization} onHide={() => setIsShowModalMutualization(false)} />
         </div>
     );
 };

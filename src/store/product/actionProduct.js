@@ -5,7 +5,7 @@ import {
     SET_PRODUCT,
     UPDATE_PRODUCT,
     SET_LIST_ORDERING,
-    SET_LIST_REPAIR_ORDER, SET_CLIENTS, SET_CASH_DESK, SET_SALES
+    SET_LIST_REPAIR_ORDER, SET_CLIENTS, SET_CASH_DESK, SET_SALES, SET_MUTUAL_SETTLEMENTS
 } from './types'
 
 export function fetchProducts (products) {return {type:FETCH_PRODUCT, payload:products}}
@@ -20,5 +20,5 @@ export function setListRepairOrder (list) {return {type:SET_LIST_REPAIR_ORDER, p
 
 export function setClients (clients) {return {type:SET_CLIENTS, payload:clients}}
 export function setCashDesk (cash) {return {type:SET_CASH_DESK, payload:cash}}
-export function setMutualSettlements (mutualSettlements) {return {type:SET_CASH_DESK, payload:mutualSettlements}}
+export function setMutualSettlements (mutualSettlements) {return {type:SET_MUTUAL_SETTLEMENTS, payload:mutualSettlements}}
 export function setSales (sales) {return {type:SET_SALES, payload:sales}}

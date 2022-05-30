@@ -42,7 +42,7 @@ const ModalCreate = ({show,onHide,}) => {
 
         httpCreateProduct(formData).then(data => {
             dispatch(addProducts(data))
-        //     // onHide()
+            onHide()
         })
         /*
             name: Galaxy A38

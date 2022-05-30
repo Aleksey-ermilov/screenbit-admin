@@ -366,7 +366,7 @@ export const productReducer = (state = initialState, action) => {
         case SET_CASH_DESK: return {
             ...state, cashDesk: action.payload
         }
-        case SET_MUTUAL_SETTLEMENTS: return {
+        case SET_MUTUAL_SETTLEMENTS:  return {
             ...state, mutualSettlements: action.payload
         }
         case SET_SALES: return {
