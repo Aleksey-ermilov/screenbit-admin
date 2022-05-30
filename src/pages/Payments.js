@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {ListGroup, Tab, Card, Table,Row,Col} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 
@@ -8,6 +8,7 @@ import Header from "../components/Header";
 
 import PlusSvg from "../img/svg/PlusSvg";
 import {setMutualSettlements} from "../store/product/actionProduct";
+import {httpCreateMutualization, httpGetMutualization} from "../http/productApi";
 
 const Payments = () => {
     const {cashDesk,mutualSettlements} = useSelector(state => state.product)
@@ -15,9 +16,16 @@ const Payments = () => {
 
     const [isShowModalMutualization,setIsShowModalMutualization] = useState(false)
 
+    useEffect(() => {
+        httpGetMutualization().then(date => {
+            dispatch(setMutualSettlements(date.mutualization))
+        })
+    },[])
+
     const handlerAddMutualization = value => {
-        console.log(11,value)
-        dispatch(setMutualSettlements([value, ...mutualSettlements]))
+        httpCreateMutualization(value).then(date => {
+            dispatch(setMutualSettlements([date.newMutualization, ...mutualSettlements]))
+        })
     }
 
     return (

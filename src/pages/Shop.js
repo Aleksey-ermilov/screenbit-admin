@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Table} from "react-bootstrap";
 
@@ -8,6 +8,7 @@ import Header from "../components/Header";
 
 import PlusSvg from "../img/svg/PlusSvg";
 import {setSales} from "../store/product/actionProduct";
+import {httpCreateShop, httpGetShop} from "../http/productApi";
 
 const Shop = () => {
     const {sales} = useSelector(state => state.product)
@@ -17,8 +18,16 @@ const Shop = () => {
 
     const option = { year: 'numeric', month: 'numeric', day: 'numeric',hour:'numeric',minute:'numeric' }
 
+    useEffect(() => {
+        httpGetShop().then(date => {
+            dispatch(setSales(date.shop))
+        })
+    },[])
+
     const handlerAddShop = value => {
-        dispatch(setSales([value, ...sales]))
+        httpCreateShop(value).then(date => {
+            dispatch(setSales([date.newShop, ...sales]))
+        })
     }
 
     return (

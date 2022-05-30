@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {useSelector,useDispatch} from "react-redux";
 import {Table} from 'react-bootstrap'
 
@@ -8,6 +8,7 @@ import Header from "../components/Header";
 
 import PlusSvg from "../img/svg/PlusSvg";
 import {setClients} from "../store/product/actionProduct";
+import {httpCreateClients, httpGetClients} from "../http/productApi";
 
 const Clients = () => {
     const {clients} = useSelector(state => state.product)
@@ -15,8 +16,16 @@ const Clients = () => {
 
     const [isShowModalClients,setIsShowModalClients] = useState(false)
 
+    useEffect(() => {
+        httpGetClients().then(date => {
+            dispatch(setClients(date.clients))
+        })
+    },[])
+
     const handlerAddClients = value => {
-        dispatch(setClients([value,...clients]))
+        httpCreateClients(value).then(date => {
+            dispatch(setClients([date.newClient,...clients]))
+        })
     }
 
     return (
