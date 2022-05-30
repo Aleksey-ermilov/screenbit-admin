@@ -16,6 +16,7 @@ import {backParseCharacteristics, parseCharacteristics} from "../helper";
 const ProductCard = () => {
     const {state: {product_id,product} } = useLocation()
     const dispatch = useDispatch()
+    const {categories} = useSelector( state => state.product)
 
     const [loading,setLoading] = useState(false)
 
@@ -39,7 +40,6 @@ const ProductCard = () => {
     }, [product_id])
 
     const handlerSaveProduct = () => {
-        console.log(product_id)
         const accessoriesReady = prod.accessories.map(item => item.title)
         const imgReady = prod.img.filter(item => !item.img.includes('data')).map( item => item.img)
         const { characterist } = backParseCharacteristics(characteristicsCategories,characteristics)
@@ -208,14 +208,20 @@ const ProductCard = () => {
                                 onChange={ e => handlerFormControl(e)}
                             />
                         </Form.Group>
-                        <Form.Group controlId="formCategory" className='mb-2'>
+                        <Form.Group controlId="formCategorySelect" className='mb-2'>
                             <Form.Label className='font-s-18' >Категория</Form.Label>
-                            <Form.Control
+                            <Form.Select
                                 className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
+                                onChange={ e => handlerFormControl(e)}
                                 name={'category'}
                                 value={prod.category}
-                                onChange={ e => handlerFormControl(e)}
-                            />
+                            >
+                                {
+                                    categories.map(item =>
+                                        <option key={item.id}>{item.name}</option>
+                                    )
+                                }
+                            </Form.Select>
                         </Form.Group>
                         <Form.Group controlId="formPrice" className='mb-2'>
                             <Form.Label className='font-s-18' >Цена</Form.Label>

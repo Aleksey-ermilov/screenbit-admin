@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {useDispatch} from 'react-redux'
+import {useDispatch,useSelector} from 'react-redux'
 import {Modal, Form,Row,Col, InputGroup,DropdownButton,Dropdown,FormControl} from 'react-bootstrap'
 
 import BoxImgModalCreate from "../BoxImgModalCreate";
@@ -8,6 +8,7 @@ import {httpCreateProduct} from "../../http/productApi";
 import {addProducts} from "../../store/product/actionProduct";
 
 const ModalCreate = ({show,onHide,}) => {
+    const {categories} = useSelector( state => state.product)
     const dispatch = useDispatch()
 
     const [file,setFile] = useState([])
@@ -18,7 +19,7 @@ const ModalCreate = ({show,onHide,}) => {
     const [characteristicsCategories,setCharacteristicsCategories] = useState([])
     const [characteristics,setCharacteristics] = useState([])
 
-    const [obj,setObj] = useState({name:'',brand:'',category:'',price:'',desc:'',warehouseCount:''})
+    const [obj,setObj] = useState({name:'',brand:'',category:'Смартфоны',price:'',desc:'',warehouseCount:''})
 
     const handlerBtn = () => {
         const accessoriesReady = accessories.map(item => item.title)
@@ -207,14 +208,20 @@ const ModalCreate = ({show,onHide,}) => {
                         onChange={ e => handlerFormControl(e)}
                     />
                 </Form.Group>
-                <Form.Group controlId="formCategory" className='mb-2'>
+                <Form.Group controlId="formCategorySelect" className='mb-2'>
                     <Form.Label className='font-s-18' >Категория</Form.Label>
-                    <Form.Control
+                    <Form.Select
                         className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
+                        onChange={ e => handlerFormControl(e)}
                         name={'category'}
                         value={obj.category}
-                        onChange={ e => handlerFormControl(e)}
-                    />
+                    >
+                        {
+                            categories.map(item =>
+                                <option key={item.id}>{item.name}</option>
+                            )
+                        }
+                    </Form.Select>
                 </Form.Group>
                 <Form.Group controlId="formPrice" className='mb-2'>
                     <Form.Label className='font-s-18' >Цена</Form.Label>

@@ -43,9 +43,8 @@ const Warehouse = () => {
 
     const handlerSwitch = (e,product) => {
         httpUpdateProduct({...product, active: e.target.checked}).then(data => {
-            dispatch(updateProducts({...data.product }))
+            dispatch(updateProducts({...data.newProduct }))
         })
-        // dispatch(updateProducts({...product, active: e.target.checked}))
     }
 
     const handlerNavigate = (item) => {

@@ -29,3 +29,12 @@ export const httpFullUpdateProduct = async (product) => {
     const {data} = await $host.post(`/api/product/fullUpdate`, product )
     return data
 }
+
+export const httpGetOrdering = async () => {
+    const {data} = await $host.get(`/api/admin/ordering`)
+    return data
+}
+export const httpGetRepairStatus = async () => {
+    const {data} = await $host.get(`/api/admin/repairOrder`)
+    return data
+}

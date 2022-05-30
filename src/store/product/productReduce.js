@@ -2,7 +2,9 @@ import {
     ADD_PRODUCT,
     DELETE_PRODUCT,
     FETCH_PRODUCT,
-    UPDATE_PRODUCT
+    UPDATE_PRODUCT,
+    SET_LIST_ORDERING,
+    SET_LIST_REPAIR_ORDER
 } from './types'
 
 import imgDefaultUser from '../../img/png/img-default-user-2.png'
@@ -318,7 +320,15 @@ import imgProduct2 from '../../img/png/0bd6a1c8-200b-4867-9dc5-7f75b780d41e.png'
 // ]
 
 const initialState = {
-    products: []
+    products: [],
+    listOrdering: [],
+    listRepairOrder: [],
+    categories:  [
+        {name: 'Смартфоны', id: '1'},
+        {name: 'Планшеты', id: '2'},
+        {name: 'Ноутбуки', id: '3'},
+        {name: 'Аксессуары', id: '4'},
+    ],
 }
 
 export const productReducer = (state = initialState, action) => {
@@ -339,6 +349,12 @@ export const productReducer = (state = initialState, action) => {
                 }
                 return item
             })
+        }
+        case SET_LIST_ORDERING: return {
+            ...state, listOrdering: action.payload
+        }
+        case SET_LIST_REPAIR_ORDER: return {
+            ...state, listRepairOrder: action.payload
         }
         // case SELECTED_CATEGORIES: return {
         //     ...state, categories: state.categories.map( item =>{
