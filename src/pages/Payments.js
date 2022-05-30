@@ -1,9 +1,136 @@
 import React from 'react';
+import {ListGroup, Tab, Card, Table,Row,Col} from "react-bootstrap";
+
+import Header from "../components/Header";
+import {useDispatch, useSelector} from "react-redux";
 
 const Payments = () => {
+    const {cashDesk,mutualSettlements} = useSelector(state => state.product)
+    const dispatch = useDispatch()
+
     return (
         <div>
-            Payments
+            <Header title={'Финансы'} />
+            <div className='px-3'>
+                <Tab.Container defaultActiveKey="#repair">
+                    <div className='d-flex'>
+                        <ListGroup horizontal>
+                            <ListGroup.Item
+                                action
+                                href="#repair"
+                                className='z-index-0 font-s-14 pb-2 list-group-payments'
+                            >
+                                Платежи
+                            </ListGroup.Item>
+
+                            <ListGroup.Item
+                                action
+                                href="#orders"
+                                className='z-index-0 font-s-14 pb-2 list-group-payments'
+                            >
+                                Взаиморасчёты
+                            </ListGroup.Item>
+                        </ListGroup>
+                    </div>
+
+                    <div className='p-3' >
+                        <Tab.Content className='mt-3' >
+                            <Tab.Pane eventKey="#repair">
+                                <Row>
+                                    <Col sm={{span:2}}>
+                                        <Card className='p-3 font-s-14'>
+                                            <div className='text-center font-s-16'>Касса</div>
+                                            <div className='text-center mb-3 font-s-24'>0</div>
+                                            <div className='d-flex mb-2 justify-content-center flex-wrap'>
+                                                <div
+                                                    className='mb-1 payments-cash-desk-btn orders-filter-btn-green cursor-pointer shadow-mine-hover'
+                                                >
+                                                    + Приход
+                                                </div>
+                                                <div
+                                                    className='ms-2 payments-cash-desk-btn orders-filter-btn-red cursor-pointer shadow-mine-hover'
+                                                >
+                                                    - Расход
+                                                </div>
+                                            </div>
+                                            <div className='d-flex justify-content-center'>
+                                                <div
+                                                    className='payments-cash-desk-btn-moving cursor-pointer shadow-mine-hover'
+                                                >
+                                                    Перемещение
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    </Col>
+                                    <Col className='ms-3'>
+                                        <Table striped bordered hover responsive
+
+                                        >
+                                            <thead>
+                                            <tr>
+                                                <th>Создана</th>
+                                                <th>Комментарий</th>
+                                                <th>Приход, руб</th>
+                                                <th>Расход, руб</th>
+                                                <th>Баланс, руб</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {
+                                                !!cashDesk.length &&
+                                                cashDesk.map((item,i) =>
+                                                    <tr key={i}>
+                                                        <td>
+                                                            <div>{item.name}</div>
+                                                            <div>{item.date}</div>
+                                                        </td>
+                                                        <td>{item.comment}</td>
+                                                        <td>{item.arrivedCash}</td>
+                                                        <td>{item.consumption}</td>
+                                                        <td>{item.balance}</td>
+                                                    </tr>
+                                                )
+                                            }
+                                            </tbody>
+                                        </Table>
+                                    </Col>
+                                </Row>
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="#orders">
+                                <div className='ms-3'>
+                                    <Table striped bordered hover responsive
+
+                                    >
+                                        <thead>
+                                        <tr>
+                                            <th>Имя/компания</th>
+                                            <th>Нам должны, руб</th>
+                                            <th>Мы должны, руб</th>
+                                            <th>Баланс, руб</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {
+                                            !!mutualSettlements.length &&
+                                            mutualSettlements.map((item,i) =>
+                                                <tr key={i}>
+                                                    <td>{item.name}</td>
+                                                    <td>{item.weOwe}</td>
+                                                    <td>{item.weShould}</td>
+                                                    <td>{item.balance}</td>
+                                                </tr>
+                                            )
+                                        }
+                                        </tbody>
+                                    </Table>
+                                </div>
+                            </Tab.Pane>
+                        </Tab.Content>
+                    </div>
+
+                </Tab.Container>
+            </div>
+
         </div>
     );
 };

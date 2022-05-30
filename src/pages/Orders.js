@@ -57,7 +57,7 @@ const Orders = () => {
 
             </div>
 
-            <div className='px-5'>
+            <div className='px-3'>
 
                 {
                     isOrdering ?
@@ -77,7 +77,7 @@ const Orders = () => {
                             </thead>
                             <tbody>
                             {
-                                listOrdering.length &&
+                                !!listOrdering.length &&
                                 listOrdering.map((item,i) =>
                                     <tr key={i}>
                                         <td>{item.status}</td>
@@ -112,7 +112,7 @@ const Orders = () => {
                             </thead>
                             <tbody>
                             {
-                                listRepairOrder.length &&
+                                !!listRepairOrder.length &&
                                 listRepairOrder.map((item,i) =>
                                     <tr key={i}>
                                         <td>{item.status}</td>

@@ -123,6 +123,10 @@ a:active,a:focus,a:hover{
   color: var(--secondary-text);
 }
 
+.z-index-0{
+  z-index: 0 !important;
+}
+
 .modal-all{
   border-radius: 15px;
 }
@@ -361,4 +365,33 @@ input[type="file"] {
   border-radius: 20px;
   width: 450px;
   background: var(--secondary);
+}
+.list-group-payments {
+  border: none;
+  border-bottom: 1px solid #CECECE;
+  border-radius: 0 !important;
+  text-align: center;
+}
+.list-group-payments:focus{
+  border: none;
+  outline: none;
+}
+.list-group-payments.active {
+  box-shadow: none ;
+  border-radius: 0 !important;
+  border: none;
+  background: var(--main-color);
+}
+.payments-cash-desk-btn{
+  align-items: center;
+  border-radius: 8px;
+  padding: 8px 16px 8px 12px;
+  color: var(--secondary-text);
+}
+.payments-cash-desk-btn-moving{
+  align-items: center;
+  border-radius: 8px;
+  border: 1px solid black;
+  padding: 8px 16px 8px 12px;
+  color: black;
 }

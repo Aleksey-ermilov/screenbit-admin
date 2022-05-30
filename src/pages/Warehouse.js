@@ -73,7 +73,10 @@ const Warehouse = () => {
                     products.length ?
                         products.map(item =>
                             <Card key={item.product_id} className='shadow-mine p-3 m-2'>
-                                <div onClick={() => handlerNavigate(item)} >
+                                <div
+                                    className='cursor-pointer'
+                                    onClick={() => handlerNavigate(item)}
+                                >
                                     <Image src={`${process.env.REACT_APP_API_URL}${item.img[0]}`} width={150} height={150} />
                                     {/*<Image src={item.img[0]} width={150} height={150} />*/}
                                 </div>

@@ -24,11 +24,11 @@ import ExitSvg2 from "../img/svg/ExitSvg2";
 import {setAuth} from "../store/user/actionUser";
 
 const navbar = [
-    {
-        title: 'Обращения',
-        Svg: LeadsSvg,
-        link: LEADS_ROUTER,
-    },
+    // {
+    //     title: 'Обращения',
+    //     Svg: LeadsSvg,
+    //     link: LEADS_ROUTER,
+    // },
     {
         title: 'Заказы',
         Svg: OrdersSvg,
@@ -75,14 +75,14 @@ const NavBar = () => {
             </div>
 
             <div>
-                <NavLink to={TASKMAN_ROUTER} >
-                    <div
-                        className={ location.pathname === TASKMAN_ROUTER ? 'p-3 navbar-link active cursor-pointer' : 'p-3 navbar-link cursor-pointer'}
-                    >
-                        <span className={location.pathname === TASKMAN_ROUTER ? 'navbar-task-icon active' : 'navbar-task-icon'}>5</span>
-                        <span className='ms-2'>Задачи</span>
-                    </div>
-                </NavLink>
+                {/*<NavLink to={TASKMAN_ROUTER} >*/}
+                {/*    <div*/}
+                {/*        className={ location.pathname === TASKMAN_ROUTER ? 'p-3 navbar-link active cursor-pointer' : 'p-3 navbar-link cursor-pointer'}*/}
+                {/*    >*/}
+                {/*        <span className={location.pathname === TASKMAN_ROUTER ? 'navbar-task-icon active' : 'navbar-task-icon'}>5</span>*/}
+                {/*        <span className='ms-2'>Задачи</span>*/}
+                {/*    </div>*/}
+                {/*</NavLink>*/}
 
                 {
                     navbar.map( (item,i) =>

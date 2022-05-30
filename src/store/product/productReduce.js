@@ -4,7 +4,7 @@ import {
     FETCH_PRODUCT,
     UPDATE_PRODUCT,
     SET_LIST_ORDERING,
-    SET_LIST_REPAIR_ORDER
+    SET_LIST_REPAIR_ORDER, SET_CLIENTS, SET_CASH_DESK, SET_MUTUAL_SETTLEMENTS, SET_SALES
 } from './types'
 
 import imgDefaultUser from '../../img/png/img-default-user-2.png'
@@ -329,6 +329,10 @@ const initialState = {
         {name: 'Ноутбуки', id: '3'},
         {name: 'Аксессуары', id: '4'},
     ],
+    clients:[],
+    cashDesk: [],
+    mutualSettlements: [],
+    sales: [],
 }
 
 export const productReducer = (state = initialState, action) => {
@@ -356,17 +360,18 @@ export const productReducer = (state = initialState, action) => {
         case SET_LIST_REPAIR_ORDER: return {
             ...state, listRepairOrder: action.payload
         }
-        // case SELECTED_CATEGORIES: return {
-        //     ...state, categories: state.categories.map( item =>{
-        //         if (item.id === action.payload){
-        //             return {...item, checked: !item.checked}
-        //         }
-        //         return item
-        //     })
-        // }
-        // case SET_SORT: return {
-        //     ...state, sort: action.payload
-        // }
+        case SET_CLIENTS: return {
+            ...state, clients: action.payload
+        }
+        case SET_CASH_DESK: return {
+            ...state, cashDesk: action.payload
+        }
+        case SET_MUTUAL_SETTLEMENTS: return {
+            ...state, mutualSettlements: action.payload
+        }
+        case SET_SALES: return {
+            ...state, sales: action.payload
+        }
         default: return state
     }
 }
