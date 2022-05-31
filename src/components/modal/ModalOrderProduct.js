@@ -14,7 +14,7 @@ const ModalOrderProduct = ({show,onHide,updateOrder}) => {
     },[show])
 
     const handlerBtnUpdate = () => {
-        if(value.status === 'Заказ выполнин'){
+        if(value.status === 'Заказ выполнен'){
             updateOrder({...show.item,...value,dateReady: Date.now()})
         }else {
             updateOrder({...show.item,...value})
@@ -53,7 +53,7 @@ const ModalOrderProduct = ({show,onHide,updateOrder}) => {
                         <option>Принят в обработку</option>
                         <option>Заказ собирается на складе</option>
                         <option>В пути</option>
-                        <option>Заказ выполнин</option>
+                        <option>Заказ выполнен</option>
                     </Form.Select>
                 </Form.Group>
                 <Form.Group controlId="formDeliveryDate" className='mb-2'>
@@ -67,7 +67,7 @@ const ModalOrderProduct = ({show,onHide,updateOrder}) => {
                     />
                 </Form.Group>
 
-                { value.status === 'Заказ выполнин' &&
+                { value.status === 'Заказ выполнен' &&
                     <>
                         <Form.Group controlId="formEmployees" className='mb-2'>
                             <Form.Label className='font-s-18' >Сотрудник</Form.Label>

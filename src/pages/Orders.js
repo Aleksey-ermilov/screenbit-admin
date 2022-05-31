@@ -3,6 +3,7 @@ import {Table} from 'react-bootstrap'
 import {useSelector,useDispatch} from "react-redux";
 
 import ModalOrderProduct from "../components/modal/ModalOrderProduct";
+import ModalRepairOrder from "../components/modal/ModalRepairOrder";
 
 import Header from "../components/Header";
 
@@ -10,7 +11,7 @@ import WrenchSvg from "../img/svg/WrenchSvg";
 import FireSvg from "../img/svg/FireSvg";
 import OclockSvg from "../img/svg/OclockSvg";
 import ShopSvg from "../img/svg/ShopSvg";
-import {httpGetOrdering, httpGetRepairStatus, httpUpdateOrdering} from "../http/productApi";
+import {httpGetOrdering, httpGetRepairStatus, httpUpdateOrdering, httpUpdateRepairStatus} from "../http/productApi";
 import {setListOrdering, setListRepairOrder} from "../store/product/actionProduct";
 
 const Orders = () => {
@@ -18,6 +19,7 @@ const Orders = () => {
     const dispatch = useDispatch()
 
     const [isShowModalOrderProduct,setIsShowModalOrderProduct] = useState({show:false, item: null})
+    const [isShowModalRepairOrder,setIsShowModalRepairOrder] = useState({show:false, item: null})
 
     const option = { year: 'numeric', month: 'numeric', day: 'numeric',hour:'numeric',minute:'numeric' }
 
@@ -35,14 +37,26 @@ const Orders = () => {
     const handlerUpdateOrdering = value => {
         httpUpdateOrdering(value).then(date => {
             let arr = []
-            if(value.status === 'Заказ выполнин'){
+            if(value.status === 'Заказ выполнен'){
                 arr = listOrdering.filter(item => item.order_id !== value.order_id)
                 dispatch(setListOrdering([...arr]))
             }else {
                 arr = listOrdering.map(item => item.order_id === value.order_id ? value : item)
                 dispatch(setListOrdering([...arr]))
             }
+        })
+    }
 
+    const handlerUpdateRepairOrder = value => {
+        httpUpdateRepairStatus(value).then(date => {
+            let arr = []
+            if(value.status === 'Заказ выполнен'){
+                arr = listRepairOrder.filter(item => item.repair_id !== value.repair_id)
+                dispatch(setListRepairOrder([...arr]))
+            }else {
+                arr = listRepairOrder.map(item => item.repair_id === value.repair_id ? value : item)
+                dispatch(setListRepairOrder([...arr]))
+            }
         })
     }
 
@@ -128,11 +142,11 @@ const Orders = () => {
                                 <th>Email</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody className='cursor-pointer'>
                             {
                                 !!listRepairOrder.length &&
                                 listRepairOrder.map((item,i) =>
-                                    <tr key={i}>
+                                    <tr key={i} onClick={() => setIsShowModalRepairOrder({show: true, item})}>
                                         <td>{item.status}</td>
                                         <td>{item.device}</td>
                                         <td>{item.brand}</td>
@@ -154,6 +168,7 @@ const Orders = () => {
             </div>
 
             <ModalOrderProduct updateOrder={handlerUpdateOrdering} show={isShowModalOrderProduct} onHide={() => setIsShowModalOrderProduct({show: false,item: null})} />
+            <ModalRepairOrder updateRepair={handlerUpdateRepairOrder} show={isShowModalRepairOrder} onHide={() => setIsShowModalRepairOrder({show: false,item: null})} />
             {/*<div className='d-flex justify-content-end flex-wrap px-5 mb-3'>
                 <div className='orders-filter-btn orders-filter-btn-green '>
                     <WrenchSvg fill='#fff' width="1.5em" height="1.5em" />
