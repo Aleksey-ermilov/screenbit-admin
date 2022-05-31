@@ -34,8 +34,17 @@ export const httpGetOrdering = async () => {
     const {data} = await $host.get(`/api/admin/ordering`)
     return data
 }
+export const httpUpdateOrdering = async (order) => {
+    const {data} = await $host.post(`/api/admin/ordering`,{order})
+    return data
+}
+
 export const httpGetRepairStatus = async () => {
     const {data} = await $host.get(`/api/admin/repairOrder`)
+    return data
+}
+export const httpUpdateRepairStatus = async (repair) => {
+    const {data} = await $host.post(`/api/admin/repairOrder`,{repair})
     return data
 }
 

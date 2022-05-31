@@ -2,18 +2,22 @@ import React, {useEffect,useState} from 'react';
 import {Table} from 'react-bootstrap'
 import {useSelector,useDispatch} from "react-redux";
 
+import ModalOrderProduct from "../components/modal/ModalOrderProduct";
+
 import Header from "../components/Header";
 
 import WrenchSvg from "../img/svg/WrenchSvg";
 import FireSvg from "../img/svg/FireSvg";
 import OclockSvg from "../img/svg/OclockSvg";
 import ShopSvg from "../img/svg/ShopSvg";
-import {httpGetOrdering, httpGetRepairStatus} from "../http/productApi";
+import {httpGetOrdering, httpGetRepairStatus, httpUpdateOrdering} from "../http/productApi";
 import {setListOrdering, setListRepairOrder} from "../store/product/actionProduct";
 
 const Orders = () => {
     const {listOrdering,listRepairOrder} = useSelector(state => state.product)
     const dispatch = useDispatch()
+
+    const [isShowModalOrderProduct,setIsShowModalOrderProduct] = useState({show:false, item: null})
 
     const option = { year: 'numeric', month: 'numeric', day: 'numeric',hour:'numeric',minute:'numeric' }
 
@@ -27,6 +31,20 @@ const Orders = () => {
             dispatch(setListRepairOrder(date.list))
         })
     },[])
+
+    const handlerUpdateOrdering = value => {
+        httpUpdateOrdering(value).then(date => {
+            let arr = []
+            if(value.status === 'Заказ выполнин'){
+                arr = listOrdering.filter(item => item.order_id !== value.order_id)
+                dispatch(setListOrdering([...arr]))
+            }else {
+                arr = listOrdering.map(item => item.order_id === value.order_id ? value : item)
+                dispatch(setListOrdering([...arr]))
+            }
+
+        })
+    }
 
     return (
         <div>
@@ -75,11 +93,11 @@ const Orders = () => {
                                 <th>Email</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody className='cursor-pointer'>
                             {
                                 !!listOrdering.length &&
                                 listOrdering.map((item,i) =>
-                                    <tr key={i}>
+                                    <tr key={i} onClick={() => setIsShowModalOrderProduct({show: true, item})}>
                                         <td>{item.status}</td>
                                         <td>{item.name}</td>
                                         <td>{item.category}</td>
@@ -134,6 +152,8 @@ const Orders = () => {
 
 
             </div>
+
+            <ModalOrderProduct updateOrder={handlerUpdateOrdering} show={isShowModalOrderProduct} onHide={() => setIsShowModalOrderProduct({show: false,item: null})} />
             {/*<div className='d-flex justify-content-end flex-wrap px-5 mb-3'>
                 <div className='orders-filter-btn orders-filter-btn-green '>
                     <WrenchSvg fill='#fff' width="1.5em" height="1.5em" />
@@ -165,51 +185,7 @@ const Orders = () => {
                 </div>
             </div>
 
-            <div className='px-3 '>
-                <Table className='orders-table' hover >
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Заказ №</th>
-                        <th scope="col">Крайний срок</th>
-                        <th scope="col">Статус</th>
-                        <th scope="col">Изделие</th>
-                        <th scope="col">Неисправность</th>
-                        <th scope="col">Клиент</th>
-                        <th scope="col">Цена</th>
-                        <th scope="col">Гарантия/уведомления</th>
-                        <th scope="col">Рекламная компания</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>Thornton</td>
-                        <td>Thornton</td>
-                        <td>Thornton</td>
-                        <td>Thornton</td>
-                        <td>Thornton</td>
-                        <td>Thornton</td>
-                    </tr>
-
-                    </tbody>
-                </Table>
-            </div>*/}
+            */}
 
         </div>
     );
