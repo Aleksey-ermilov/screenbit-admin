@@ -21,30 +21,39 @@ const ModalCreate = ({show,onHide,}) => {
 
     const [obj,setObj] = useState({name:'',brand:'',category:'Смартфоны',price:'',desc:'',warehouseCount:''})
 
-    const handlerBtn = () => {
-        const accessoriesReady = accessories.map(item => item.title)
-        const arr = characteristicsCategories.map(thing => {
-            const char = characteristics.filter(item => item.category === thing.id).map(item => [item.title,item.value] )
-            return [thing.title, char]
-        })
+    const [validated, setValidated] = useState(false);
 
-        const formData = new FormData();
-        img.forEach(item => formData.append('img',item.picture))
-        formData.append('name',obj.name)
-        formData.append('brand',obj.brand)
-        formData.append('category',obj.category)
-        formData.append('type',obj.category)
-        formData.append('price',obj.price)
-        formData.append('desc',obj.desc)
-        formData.append('warehouseCount',obj.warehouseCount)
-        formData.append('accessories',JSON.stringify(accessoriesReady))
-        formData.append('characteristics',JSON.stringify(arr))
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.stopPropagation();
+            setValidated(true);
+        }else {
 
-        httpCreateProduct(formData).then(data => {
-            dispatch(addProducts(data))
-            onHide()
-        })
-        /*
+            const accessoriesReady = accessories.map(item => item.title)
+            const arr = characteristicsCategories.map(thing => {
+                const char = characteristics.filter(item => item.category === thing.id).map(item => [item.title,item.value] )
+                return [thing.title, char]
+            })
+
+            const formData = new FormData();
+            img.forEach(item => formData.append('img',item.picture))
+            formData.append('name',obj.name)
+            formData.append('brand',obj.brand)
+            formData.append('category',obj.category)
+            formData.append('type',obj.category)
+            formData.append('price',obj.price)
+            formData.append('desc',obj.desc)
+            formData.append('warehouseCount',obj.warehouseCount)
+            formData.append('accessories',JSON.stringify(accessoriesReady))
+            formData.append('characteristics',JSON.stringify(arr))
+
+            httpCreateProduct(formData).then(data => {
+                dispatch(addProducts(data))
+                onHide()
+            })
+            /*
             name: Galaxy A38
             brand: Samsung
             category: Смартфоны
@@ -58,8 +67,10 @@ const ModalCreate = ({show,onHide,}) => {
                         [Корпус и защита,[Материал корпуса,пластик][Вид защитного покрытия,Corning Gorilla Glass 5]
         */
 
+            setValidated(false);
+        }
+    };
 
-    }
     const handlerBtnCancel = () => {
         onHide()
         setFile([])
@@ -136,237 +147,249 @@ const ModalCreate = ({show,onHide,}) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div className='mb-3'>
-                    <div className='mb-1 d-flex justify-content-center'>
-                        {
-                            !file.length ?
-                                <BoxAddImgModalCreate
-                                    height={'150px'}
-                                    width={'150px'}
-                                    sizeSvg={'2.5em'}
-                                    handlerAddImg={(e) => handlerAddImg(e)}
-                                />
-                                :
-                                <BoxImgModalCreate
-                                    deleteFile={handlerBtnDelete}
-                                    setOneElem={handlerBtnArrowTop}
-                                    file={file[0]}
-                                    index={0}
-                                    width={150}
-                                    height={150}
-                                    sizeSvg={'2em'}
-                                />
-                        }
-                    </div>
-                    <div className='d-flex justify-content-center'>
-                        {
-                            file.length >= 1 &&
-                            <>
-                                {file.map((item,i) => {
-                                    if (i >=1){
-                                        return <BoxImgModalCreate
-                                            deleteFile={handlerBtnDelete}
-                                            setOneElem={handlerBtnArrowTop}
-                                            className='m-1'
-                                            file={item}
-                                            index={i}
-                                            width={50}
-                                            height={50}
-                                            sizeSvg={'1.2em'}
-                                            key={item.id}
-                                        />
-                                    }
-                                })}
-                                {
-                                    file.length < 9 &&
+                <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                    <div className='mb-3'>
+                        <div className='mb-1 d-flex justify-content-center'>
+                            {
+                                !file.length ?
                                     <BoxAddImgModalCreate
-                                        className='m-1'
-                                        sizeSvg={'1em'}
+                                        height={'150px'}
+                                        width={'150px'}
+                                        sizeSvg={'2.5em'}
                                         handlerAddImg={(e) => handlerAddImg(e)}
                                     />
-                                }
-                            </>
+                                    :
+                                    <BoxImgModalCreate
+                                        deleteFile={handlerBtnDelete}
+                                        setOneElem={handlerBtnArrowTop}
+                                        file={file[0]}
+                                        index={0}
+                                        width={150}
+                                        height={150}
+                                        sizeSvg={'2em'}
+                                    />
+                            }
+                        </div>
+                        <div className='d-flex justify-content-center'>
+                            {
+                                file.length >= 1 &&
+                                <>
+                                    {file.map((item,i) => {
+                                        if (i >=1){
+                                            return <BoxImgModalCreate
+                                                deleteFile={handlerBtnDelete}
+                                                setOneElem={handlerBtnArrowTop}
+                                                className='m-1'
+                                                file={item}
+                                                index={i}
+                                                width={50}
+                                                height={50}
+                                                sizeSvg={'1.2em'}
+                                                key={item.id}
+                                            />
+                                        }
+                                    })}
+                                    {
+                                        file.length < 9 &&
+                                        <BoxAddImgModalCreate
+                                            className='m-1'
+                                            sizeSvg={'1em'}
+                                            handlerAddImg={(e) => handlerAddImg(e)}
+                                        />
+                                    }
+                                </>
+                            }
+                        </div>
+
+                    </div>
+                    <Form.Group controlId="formName" className='mb-2'>
+                        <Form.Label className='font-s-18' >Название товара</Form.Label>
+                        <Form.Control
+                            required
+                            className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
+                            name={'name'}
+                            value={obj.name}
+                            onChange={ e => handlerFormControl(e)}
+                        />
+                        <Form.Control.Feedback type="invalid">Поле "Название товара" не может быть пустым</Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group controlId="formBrand" className='mb-2'>
+                        <Form.Label className='font-s-18' >Бренд</Form.Label>
+                        <Form.Control
+                            required
+                            className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
+                            name={'brand'}
+                            value={obj.brand}
+                            onChange={ e => handlerFormControl(e)}
+                        />
+                        <Form.Control.Feedback type="invalid">Поле "Бренд" не может быть пустым</Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group controlId="formCategorySelect" className='mb-2'>
+                        <Form.Label className='font-s-18' >Категория</Form.Label>
+                        <Form.Select
+                            className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
+                            onChange={ e => handlerFormControl(e)}
+                            name={'category'}
+                            value={obj.category}
+                        >
+                            {
+                                categories.map(item =>
+                                    <option key={item.id}>{item.name}</option>
+                                )
+                            }
+                        </Form.Select>
+                    </Form.Group>
+                    <Form.Group controlId="formPrice" className='mb-2'>
+                        <Form.Label className='font-s-18' >Цена</Form.Label>
+                        <Form.Control
+                            required
+                            className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
+                            name={'price'}
+                            type='number'
+                            value={obj.price}
+                            onChange={ e => handlerFormControl(e)}
+                        />
+                        <Form.Control.Feedback type="invalid">Поле "Цена" не может быть пустым</Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group controlId="formDesc" className='mb-2'>
+                        <Form.Label className='font-s-18' >Описание</Form.Label>
+                        <Form.Control
+                            className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
+                            as="textarea"
+                            rows={4}
+                            name={'desc'}
+                            value={obj.desc}
+                            onChange={ e => handlerFormControl(e)}
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="formWarehouseCount" className='mb-2'>
+                        <Form.Label className='font-s-18' >Количество товара</Form.Label>
+                        <Form.Control
+                            required
+                            className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
+                            name={'warehouseCount'}
+                            type='number'
+                            value={obj.warehouseCount}
+                            onChange={ e => handlerFormControl(e)}
+                        />
+                        <Form.Control.Feedback type="invalid">Поле "Количество товара" не может быть пустым</Form.Control.Feedback>
+                    </Form.Group>
+
+                    <div className='mb-2'>
+                        <button className='btn-all btn-regular mb-2 shadow-mine-hover' onClick={addAccessories}>Добавить аксессуар</button>
+                        {
+                            accessories.map((item,i) =>
+                                <Form.Group controlId={`formAccessory${i}`} className='mb-2' key={item.id}>
+                                    <Row>
+                                        <Col sm={{offset:1,span: 10}} className='mb-1'>
+                                                <Form.Control
+                                                    required
+                                                    placeholder={'Аксессуар'}
+                                                    className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
+                                                    value={item.title}
+                                                    onChange={ e => changeAccessories(e,item)}
+                                                />
+                                                <Form.Control.Feedback type="invalid">Поле "Аксессуар" не может быть пустым</Form.Control.Feedback>
+                                        </Col>
+                                        <Col sm={{span:1}} >
+                                            <button
+                                                onClick={() => removeAccessories(item)}
+                                                className='btn-all btn-delete-product-modal shadow-mine-hover'
+                                            >X</button>
+                                        </Col>
+                                    </Row>
+                                </Form.Group>
+                            )
                         }
                     </div>
 
-                </div>
-                <Form.Group controlId="formName" className='mb-2'>
-                    <Form.Label className='font-s-18' >Название товара</Form.Label>
-                    <Form.Control
-                        className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
-                        name={'name'}
-                        value={obj.name}
-                        onChange={ e => handlerFormControl(e)}
-                    />
-                </Form.Group>
-                <Form.Group controlId="formBrand" className='mb-2'>
-                    <Form.Label className='font-s-18' >Бренд</Form.Label>
-                    <Form.Control
-                        className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
-                        name={'brand'}
-                        value={obj.brand}
-                        onChange={ e => handlerFormControl(e)}
-                    />
-                </Form.Group>
-                <Form.Group controlId="formCategorySelect" className='mb-2'>
-                    <Form.Label className='font-s-18' >Категория</Form.Label>
-                    <Form.Select
-                        className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
-                        onChange={ e => handlerFormControl(e)}
-                        name={'category'}
-                        value={obj.category}
-                    >
+                    <div className='mb-2'>
+                        <button className='btn-all btn-regular mb-2 shadow-mine-hover' onClick={addCharacteristicsCategories}>Добавить характеристики</button>
                         {
-                            categories.map(item =>
-                                <option key={item.id}>{item.name}</option>
+                            characteristicsCategories.map((item,i) =>
+                                <div className='mb-2' key={item.id}>
+                                    <Row className='mb-1'>
+                                        <Col sm={{offset:1}} className='mb-1'>
+                                            <Form.Group controlId={`formCharacteristicsCategories${i}`}>
+                                                <Form.Control
+                                                    required
+                                                    placeholder={'Категория характеристики'}
+                                                    className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
+                                                    value={item.title}
+                                                    onChange={ e => changeCharacteristicsCategories(e,item)}
+                                                />
+                                                <Form.Control.Feedback type="invalid">Поле "Категория характеристики" не может быть пустым</Form.Control.Feedback>
+                                            </Form.Group>
+                                        </Col>
+                                        <Col sm={{span:4}} className='d-flex justify-content-end align-items-center'>
+                                            <button
+                                                onClick={() => addCharacteristics(item.id)}
+                                                className='btn-all btn-regular me-2 shadow-mine-hover'
+                                            >Добавить поле</button>
+                                            <button
+                                                onClick={() => removeCharacteristicsCategories(item)}
+                                                className='btn-all btn-delete-product-modal shadow-mine-hover'
+                                            >X</button>
+                                        </Col>
+                                    </Row>
+                                    {
+                                        characteristics.filter(i => i.category === item.id).map(thing =>
+                                            <div className='mb-1' key={thing.id}>
+                                                <Row>
+                                                    <Col sm={{offset:2}} className='mb-1'>
+                                                        <Form.Group controlId={`formCharacteristicsTitle${i}`}>
+                                                            <Form.Control
+                                                                required
+                                                                placeholder={'Наименование'}
+                                                                className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
+                                                                name={'title'}
+                                                                value={thing.title}
+                                                                onChange={ e => changeCharacteristics(e,thing)}
+                                                            />
+                                                            <Form.Control.Feedback type="invalid">Поле "Наименование" не может быть пустым</Form.Control.Feedback>
+                                                        </Form.Group>
+                                                    </Col>
+                                                    <Col>
+                                                        <Form.Group controlId={`formCharacteristicsValue${i}`}>
+                                                            <Form.Control
+                                                                required
+                                                                placeholder={'Значение'}
+                                                                className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
+                                                                name={'value'}
+                                                                value={thing.value}
+                                                                onChange={ e => changeCharacteristics(e,thing)}
+                                                            />
+                                                            <Form.Control.Feedback type="invalid">Поле "Значение" не может быть пустым</Form.Control.Feedback>
+                                                        </Form.Group>
+                                                    </Col>
+                                                    <Col  className='d-flex justify-content-end align-items-center'>
+                                                        <button
+                                                            onClick={() => removeCharacteristics(thing)}
+                                                            className='btn-all btn-delete-product-modal shadow-mine-hover'
+                                                        >X</button>
+
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                        )
+                                    }
+                                </div>
                             )
                         }
-                    </Form.Select>
-                </Form.Group>
-                <Form.Group controlId="formPrice" className='mb-2'>
-                    <Form.Label className='font-s-18' >Цена</Form.Label>
-                    <Form.Control
-                        className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
-                        name={'price'}
-                        value={obj.price}
-                        onChange={ e => handlerFormControl(e)}
-                    />
-                </Form.Group>
-                <Form.Group controlId="formDesc" className='mb-2'>
-                    <Form.Label className='font-s-18' >Описание</Form.Label>
-                    <Form.Control
-                        className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
-                        as="textarea"
-                        rows={4}
-                        name={'desc'}
-                        value={obj.desc}
-                        onChange={ e => handlerFormControl(e)}
-                    />
-                </Form.Group>
-                <Form.Group controlId="formWarehouseCount" className='mb-2'>
-                    <Form.Label className='font-s-18' >Количество товара</Form.Label>
-                    <Form.Control
-                        className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
-                        name={'warehouseCount'}
-                        value={obj.warehouseCount}
-                        onChange={ e => handlerFormControl(e)}
-                    />
-                </Form.Group>
 
-                <div className='mb-2'>
-                    <button className='btn-all btn-regular mb-2 shadow-mine-hover' onClick={addAccessories}>Добавить аксессуар</button>
-                    {
-                        accessories.map((item,i) =>
-                            <Form.Group controlId={`formAccessory${i}`} className='mb-2' key={item.id}>
-                                <Row>
-                                    <Col sm={{offset:1,span: 10}} className='mb-1'>
-                                        <Form.Control
-                                            placeholder={'Аксессуар'}
-                                            className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
-                                            value={item.title}
-                                            onChange={ e => changeAccessories(e,item)}
-                                        />
-                                    </Col>
-                                    <Col sm={{span:1}} >
-                                        <button
-                                            onClick={() => removeAccessories(item)}
-                                            className='btn-all btn-delete-product-modal shadow-mine-hover'
-                                        >X</button>
-                                    </Col>
-                                </Row>
-                            </Form.Group>
-                        )
-                    }
-                </div>
+                    </div>
 
-                <div className='mb-2'>
-                    <button className='btn-all btn-regular mb-2 shadow-mine-hover' onClick={addCharacteristicsCategories}>Добавить характеристики</button>
-                    {
-                        characteristicsCategories.map((item,i) =>
-                            <div className='mb-2' key={item.id}>
-                                <Row className='mb-1'>
-                                    <Col sm={{offset:1}} className='mb-1'>
-                                        <Form.Control
-                                            placeholder={'Категория характеристики'}
-                                            className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
-                                            value={item.title}
-                                            onChange={ e => changeCharacteristicsCategories(e,item)}
-                                        />
-                                    </Col>
-                                    <Col sm={{span:4}} className='d-flex justify-content-end'>
-                                        <button
-                                            onClick={() => addCharacteristics(item.id)}
-                                            className='btn-all btn-regular me-2 shadow-mine-hover'
-                                        >Добавить поле</button>
-                                        <button
-                                            onClick={() => removeCharacteristicsCategories(item)}
-                                            className='btn-all btn-delete-product-modal shadow-mine-hover'
-                                        >X</button>
-                                    </Col>
-                                </Row>
-                                {
-                                    characteristics.filter(i => i.category === item.id).map(thing =>
-                                        <div className='mb-1' key={thing.id}>
-                                            <Row>
-                                                <Col sm={{offset:2}} className='mb-1'>
-                                                    <Form.Control
-                                                        placeholder={'Наименование'}
-                                                        className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
-                                                        name={'title'}
-                                                        value={thing.title}
-                                                        onChange={ e => changeCharacteristics(e,thing)}
-                                                    />
-                                                </Col>
-                                                <Col>
-                                                    <Form.Control
-                                                        placeholder={'Значение'}
-                                                        className='my-form-control shadow-inner-neomorph-focus shadow-mine-hover'
-                                                        name={'value'}
-                                                        value={thing.value}
-                                                        onChange={ e => changeCharacteristics(e,thing)}
-                                                    />
-                                                </Col>
-                                                <Col  className='d-flex justify-content-end'>
-                                                    <button
-                                                        onClick={() => removeCharacteristics(thing)}
-                                                        className='btn-all btn-delete-product-modal shadow-mine-hover'
-                                                    >X</button>
-
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                    )
-                                }
-                            </div>
-                        )
-                    }
-
-                </div>
-
-                {/*<InputGroup className="mb-3">
-                    <DropdownButton
-                        title="Dropdown"
-                        id="input-group-dropdown-1"
-                    >
-                        <Dropdown.Item href="#">brand 1</Dropdown.Item>
-                        <Dropdown.Item href="#">brand 2</Dropdown.Item>
-                        <Dropdown.Item href="#">brand 3</Dropdown.Item>
-                    </DropdownButton>
-                    <FormControl aria-label="Text input with dropdown button" />
-                </InputGroup>*/}
-
-
-
-                <div className='d-flex justify-content-between mt-5'>
-                    <button
-                        className='btn-all btn-regular shadow-mine-hover shadow-inner-my-focus font-s-18 py-2'
-                        onClick={handlerBtnCancel}
-                    >Отмена</button>
-                    <button
-                        className='btn-all btn-regular shadow-mine-hover shadow-inner-my-focus font-s-18 py-2'
-                        onClick={handlerBtn}
-                    >Добавить</button>
-                </div>
+                    <div className='d-flex justify-content-between mt-5'>
+                        <button
+                            className='btn-all btn-regular shadow-mine-hover shadow-inner-my-focus font-s-18 py-2'
+                            onClick={handlerBtnCancel}
+                        >Отмена</button>
+                        <button
+                            className='btn-all btn-regular shadow-mine-hover shadow-inner-my-focus font-s-18 py-2'
+                            type='submit'
+                        >Добавить</button>
+                    </div>
+                </Form>
 
             </Modal.Body>
         </Modal>

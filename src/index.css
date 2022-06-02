@@ -16,6 +16,7 @@ body {
   --secondary: #FFFFFF;
   --secondary-text: #FFFFFF;
   --unactive: #767676;
+  --error: #dc3545;
 }
 
 code {
@@ -71,6 +72,9 @@ code {
 }
 .secondary-text{
   color: var(--secondary);
+}
+.color-error{
+  color: var(--error);
 }
 .cursor-pointer{
   cursor: pointer;
@@ -356,6 +360,9 @@ input[type="file"] {
 }
 .my-form-control:focus{
   outline: none;
+}
+form.was-validated select.my-form-control{
+  background-image: none !important;
 }
 .auth-box{
   background: var(--main-color);

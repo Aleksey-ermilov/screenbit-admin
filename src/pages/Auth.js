@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom'
-import {Form, FormControl} from 'react-bootstrap'
+import {Form} from 'react-bootstrap'
 import {useDispatch} from "react-redux";
 
 import {setAuth} from "../store/user/actionUser";
@@ -15,10 +15,15 @@ const Auth = () => {
     const [login,setLogin] = useState('')
     const [password,setPassword] = useState('')
 
+    const [mesError, setMesError] = useState('')
+
     const handlerBtnLogin = () => {
         httpLoginAdmin(login,password).then(data => {
             navigate(WAREHOUSE_ROUTER)
             dispatch(setAuth(true))
+            setMesError('')
+        }).catch(data => {
+            setMesError(data.response.data.message)
         })
     }
 
@@ -32,6 +37,7 @@ const Auth = () => {
                     value={login}
                     onChange={ e => setLogin(e.target.value)}
                 />
+                {mesError && <span className='font-s-13 mt-1 color-error'>{mesError}</span>}
             </Form.Group>
             <Form.Group controlId="formPass" className='mb-4'>
                 <Form.Label className='font-s-18' >Пароль</Form.Label>
@@ -41,6 +47,7 @@ const Auth = () => {
                     value={password}
                     onChange={ e => setPassword(e.target.value)}
                 />
+                {mesError && <span className='font-s-13 mt-1 color-error'>{mesError}</span>}
             </Form.Group>
             <div className='d-flex justify-content-end'>
                 <button
